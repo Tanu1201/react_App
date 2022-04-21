@@ -33,14 +33,15 @@ function Pagin() {
   const [currentPage, setcurrentPage] = useState(1)
   
   const classes = useStyles()
-   const URL = `https://reqres.in/api/users?page=${currentPage}`
-
-   const handleFetch = () => {
+  
+  const handleFetch = (value:any=1) => {
+     var URL = `https://reqres.in/api/users?page=${value}`
      fetch(URL)
        .then(response => response.json())
        .then(body => {
          setUsers([...body.data])
          setPageCount(body.total_pages)
+         
          
          setisLoaded(true)
          
@@ -48,9 +49,9 @@ function Pagin() {
        .catch(error => console.error('Error', error))
    }
 
-   const handlePageChange =(event: any,value: React.SetStateAction<number>) => {
+   const handlePageChange = (event: any,value: React.SetStateAction<number>) => {
+     handleFetch(value)
      setcurrentPage(value)
-     handleFetch()
    }
    if(!isLoaded)
     handleFetch()
@@ -71,40 +72,39 @@ function Pagin() {
         justify="center"
         alignItems="center"
       >
-        {isLoaded ? 
-        
+        {isLoaded ? (
           users.map(user => (
-          <Grid item xs={6} sm={6} md={6} key={user.id}>
-            {/* <Box sx={{ minWidth: 275 }}> */}
-            <Card>
-              {/* <CardActionArea> */}
-              {/* <div key={user.id}> */}
-              <img alt={user.first_name} src={user.avatar}></img>
+            <Grid item xs={6} sm={6} md={6} key={user.id}>
+              {/* <Box sx={{ minWidth: 275 }}> */}
+              <Card>
+                {/* <CardActionArea> */}
+                {/* <div key={user.id}> */}
+                <img alt={user.first_name} src={user.avatar}></img>
 
-              <div>
-                <CardContent>
-                  {/* <Typography variant="body2" color="text.secondary"> */}
-                  <b>
-                    {user.first_name} {user.last_name}
-                    <br />
-                    {user.email}
-                  </b>
-                  {/* </Typography> */}
-                </CardContent>
-              </div>
-              {/* </div> */}
-            </Card>
-            {/* </Box> */}
-          </Grid>
-        )) : (
+                <div>
+                  <CardContent>
+                    {/* <Typography variant="body2" color="text.secondary"> */}
+                    <b>
+                      {user.first_name} {user.last_name}
+                      <br />
+                      {user.email}
+                    </b>
+                    {/* </Typography> */}
+                  </CardContent>
+                </div>
+                {/* </div> */}
+              </Card>
+              {/* </Box> */}
+            </Grid>
+          ))
+        ) : (
           <div></div>
         )}
-
-        
       </Grid>
       <Pagination
         count={pageCount}
         page={currentPage}
+        defaultPage={1}
         onChange={handlePageChange}
       />
     </div>
