@@ -1,10 +1,10 @@
-import { Pagination } from '@mui/material'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { Pagination } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 // import axios from 'axios'
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 
 type User = {
   id: number
@@ -19,43 +19,43 @@ const useStyles = makeStyles(theme => ({
     // paddingLeft: '40px',
     // paddingRight: '40px',
     padding: theme.spacing(2),
-    width: '500px',
+    width: '700px',
     display: 'flex',
     textAlign: 'center',
+    margin: 'auto',
     justify: 'center'
   }
 }))
 
 function Pagin() {
   const [users, setUsers] = useState<User[]>([])
-  const [pageCount, setPageCount] = useState(1) 
+  const [pageCount, setPageCount] = useState(1)
   const [isLoaded, setisLoaded] = useState(false)
   const [currentPage, setcurrentPage] = useState(1)
-  
+
   const classes = useStyles()
-  
-  const handleFetch = (value:any=1) => {
-     var URL = `https://reqres.in/api/users?page=${value}`
-     fetch(URL)
-       .then(response => response.json())
-       .then(body => {
-         setUsers([...body.data])
-         setPageCount(body.total_pages)
-         
-         
-         setisLoaded(true)
-         
-       })
-       .catch(error => console.error('Error', error))
-   }
 
-   const handlePageChange = (event: any,value: React.SetStateAction<number>) => {
-     handleFetch(value)
-     setcurrentPage(value)
-   }
-   if(!isLoaded)
-    handleFetch()
+  const handleFetch = (value: any = 1) => {
+    var URL = `https://reqres.in/api/users?page=${value}`
+    fetch(URL)
+      .then(response => response.json())
+      .then(body => {
+        setUsers([...body.data])
+        setPageCount(body.total_pages)
 
+        setisLoaded(true)
+      })
+      .catch(error => console.error('Error', error))
+  }
+
+  const handlePageChange = (
+    event: any,
+    value: React.SetStateAction<number>
+  ) => {
+    handleFetch(value)
+    setcurrentPage(value)
+  }
+  if (!isLoaded) handleFetch()
 
   return (
     <div
@@ -68,7 +68,7 @@ function Pagin() {
       <Grid
         container
         className={classes.gridContainer}
-        spacing={4}
+        spacing={6}
         justify="center"
         alignItems="center"
       >
@@ -101,14 +101,18 @@ function Pagin() {
           <div></div>
         )}
       </Grid>
-      <Pagination
-        count={pageCount}
-        page={currentPage}
-        defaultPage={1}
-        onChange={handlePageChange}
-      />
+
+      <div className="main">
+        <Pagination
+          count={pageCount}
+          page={currentPage}
+          defaultPage={1}
+          onChange={handlePageChange}
+        />
+      </div>
     </div>
   )
 }
 
 export default Pagin
+
